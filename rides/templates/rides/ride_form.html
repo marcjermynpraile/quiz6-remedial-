@@ -1,0 +1,77 @@
+<form method="post" action="{% url 'rides:book' %}">
+  {% csrf_token %}
+  {{ form.non_field_errors }}
+
+  <div class="mb-3">
+    <label for="id_pickup_location" class="form-label">Pickup location</label>
+    {{ form.pickup_location }}
+    {{ form.pickup_location.errors }}
+  </div>
+
+  <div class="mb-3">
+    <label for="id_destination" class="form-label">Destination</label>
+    {{ form.destination }}
+    {{ form.destination.errors }}
+  </div>
+
+  <div class="mb-3">
+    <label for="id_total_distance" class="form-label">Total distance (km)</label>
+    {{ form.total_distance }}
+    {{ form.total_distance.errors }}
+    <div class="form-text">This will be auto-generated when you provide pickup & destination.</div>
+  </div>
+
+  <div class="mb-3">
+    <label for="id_price" class="form-label">Price</label>
+    {{ form.price }}
+    {{ form.price.errors }}
+  </div>
+
+  <button type="submit" class="btn btn-success">Book Ride</button>
+</form>
+
+<script>
+
+  (function () {
+    // helper random integer 10..30
+    function randDistance() {
+      return Math.floor(Math.random() * (30 - 10 + 1)) + 10;
+    }
+
+    // grab DOM elements (Django default ids)
+    const pickup = document.getElementById('id_pickup_location');
+    const dest = document.getElementById('id_destination');
+    const dist = document.getElementById('id_total_distance');
+
+    if (!pickup || !dest || !dist) return; // fail-safe
+
+    // ensure distance input is readonly (in case form/widget doesn't set it)
+    dist.setAttribute('readonly', 'readonly');
+
+    // set distance when both fields are non-empty
+    function trySetDistance() {
+      const p = pickup.value && pickup.value.trim();
+      const d = dest.value && dest.value.trim();
+
+      if (p && d) {
+        // if distance already set and >0, don't overwrite (user may have server-provided value)
+        // but per your requirement we auto-generate when both are provided (only once)
+        if (!dist.value || dist.value === '0') {
+          dist.value = randDistance();
+        }
+      } else {
+        // clear if either field empty
+        dist.value = '';
+      }
+    }
+
+    // trigger as user types or after focus leaves
+    ['input', 'change', 'blur'].forEach(ev => {
+      pickup.addEventListener(ev, trySetDistance);
+      dest.addEventListener(ev, trySetDistance);
+    });
+
+    // also run once on load (useful if form re-rendered with errors and both fields already filled)
+    document.addEventListener('DOMContentLoaded', trySetDistance);
+  })();
+</script>

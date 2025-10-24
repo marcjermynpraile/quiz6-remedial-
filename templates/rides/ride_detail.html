@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h3>Ride #{{ object.pk }}</h3>
+  <p>Pickup: {{ object.pickup_location }}</p>
+  <p>Destination: {{ object.destination }}</p>
+  <p>Distance: {{ object.total_distance }}</p>
+  <p>Price: {{ object.price }}</p>
+  <p>Status: {{ object.status }}</p>
+  <h3>Timeline</h3>
+<ul class="list-group">
+  {% for ev in object.events.all %}
+    <li class="list-group-item">
+      <strong>Step {{ ev.step_count }}:</strong> {{ ev.description }}
+      <div class="small text-muted">{{ ev.created_at|date:"M d, Y H:i" }}</div>
+    </li>
+  {% empty %}
+    <li class="list-group-item text-muted">No events yet.</li>
+  {% endfor %}
+</ul>
+
+{% endblock %}

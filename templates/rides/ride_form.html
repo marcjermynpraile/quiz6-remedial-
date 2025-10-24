@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}Book a Ride{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2 class="mb-4">Book a Ride</h2>
+
+  <form method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+
+    <div class="mb-3">
+      <label for="id_pickup_location" class="form-label">Pickup location</label>
+      {{ form.pickup_location }}
+      {{ form.pickup_location.errors }}
+    </div>
+
+    <div class="mb-3">
+      <label for="id_destination" class="form-label">Destination</label>
+      {{ form.destination }}
+      {{ form.destination.errors }}
+    </div>
+
+    <div class="mb-3">
+      <label for="id_total_distance" class="form-label">Total distance (km)</label>
+      {{ form.total_distance }}
+      {{ form.total_distance.errors }}
+      <div class="form-text">This will be auto-generated when you submit the form.</div>
+    </div>
+
+    <div class="mb-3">
+      <label for="id_price" class="form-label">Price</label>
+      {{ form.price }}
+      {{ form.price.errors }}
+    </div>
+
+    <button type="submit" class="btn btn-success">Book Ride</button>
+  </form>
+</div>
+{% endblock %}

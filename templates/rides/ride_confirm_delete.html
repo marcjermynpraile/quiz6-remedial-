@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Delete Ride{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="card shadow-sm p-4">
+    <h4>Confirm Ride Deletion</h4>
+    <p>Are you sure you want to delete this ride from <strong>{{ object.pickup_location }}</strong> to <strong>{{ object.destination }}</strong>?</p>
+
+    <form method="post">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-danger">Yes, delete</button>
+      <a href="{% url 'rides:list' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+  </div>
+</div>
+{% endblock %}
+

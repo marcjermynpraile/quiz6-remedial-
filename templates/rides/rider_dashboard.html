@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}Rider Dashboard{% endblock %}
+{% block content %}
+<div class="container mt-4">
+  <h2>Rider Dashboard</h2>
+  <p>Today's total distance: {{ total_today }} km</p>
+
+  <h4 class="mt-4">Available Rides</h4>
+  {% if available_rides %}
+    <ul class="list-group mb-4">
+      {% for ride in available_rides %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <div>
+            <strong>{{ ride.pickup_location }}</strong> → {{ ride.destination }}
+            <div class="small text-muted">Price: ₱{{ ride.price }} · Distance: {{ ride.total_distance }} km</div>
+          </div>
+          <form method="post" action="{% url 'rides:accept_ride' ride.pk %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-success btn-sm">Accept</button>
+          </form>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No available rides right now.</p>
+  {% endif %}
+
+  <h4>Your Assigned / Past Rides</h4>
+  {% if my_rides %}
+    <div>
+      {% for ride in my_rides %}
+        <div class="card mb-2 p-2">
+          <div>
+            <strong>{{ ride.pickup_location }}</strong> → {{ ride.destination }}
+            <div class="small text-muted">Status: {{ ride.status }} · Price: ₱{{ ride.price }}</div>
+          </div>
+          {% if ride.status == 'assigned' and ride.rider == request.user %}
+            <form method="post" action="{% url 'rides:complete_ride' ride.pk %}" class="mt-2">
+              {% csrf_token %}
+              <button class="btn btn-primary btn-sm" type="submit">Mark as Complete</button>
+            </form>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>No rides assigned yet.</p>
+  {% endif %}
+</div>
+{% endblock %}

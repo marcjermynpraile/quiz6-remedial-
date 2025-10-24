@@ -1,0 +1,7 @@
+/* dashboard specific */
+.dashboard-hero{background:linear-gradient(90deg,#006bb3 0%, #0097e6 100%); color: #fff; padding:28px; border-radius:12px; margin-bottom:20px;}
+.stat-grid{gap:18px}
+.stat-card{background:#fff;border-radius:12px; padding:18px; box-shadow:0 6px 18px rgba(10,20,40,0.06); text-align:center}
+.stat-card .value{font-size:1.6rem; font-weight:700}
+.stat-card .label{color:#6b7280; font-size:0.9rem}
+.table thead th{background:#e9f5ff}

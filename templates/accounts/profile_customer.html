@@ -1,0 +1,28 @@
+
+{% extends 'base.html' %}
+{% block title %}profile{% endblock %}
+{% block content %}
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3>hi, {{ user.first_name }}</h3>
+    <a class="btn btn-outline-dark" href="{% url 'rides:create' %}">book a ride</a>
+  </div>
+
+  <div class="card mb-3 p-3">
+    <div><strong>balance:</strong> ₱{{ user.balance }}</div>
+    <div class="text-muted">role: {{ user.user_role }}</div>
+  </div>
+
+  <h5>your rides</h5>
+  <ul class="list-group mt-2">
+    {% for r in rides %}
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <div>
+          <strong>#{{ r.id }}</strong> — {{ r.destination }} <small class="text-muted">({{ r.status }})</small>
+        </div>
+        <div><a href="{% url 'rides:detail' r.pk %}" class="btn btn-sm btn-outline-dark">view</a></div>
+      </li>
+    {% empty %}
+      <li class="list-group-item text-muted">no rides yet</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

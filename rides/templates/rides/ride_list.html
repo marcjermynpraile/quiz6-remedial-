@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+  <h2>Welcome, {{ request.user.username }}!</h2>
+
+  {% if request.user.user_role == "customer" %}
+    <p class="text-muted">Here are your booked rides.</p>
+    <a class="btn btn-primary mb-3" href="{% url 'rides:create' %}">Book a new ride</a>
+  {% elif request.user.user_role == "rider" %}
+    <p class="text-muted">Here are the rides assigned to you.</p>
+    <a class="btn btn-secondary mb-3" href="{% url 'rides:rider_dashboard' %}">Go to Rider Dashboard</a>
+  {% elif request.user.user_role == "staff" %}
+    <p class="text-muted">Full list of all rides in the system.</p>
+  {% endif %}
+
+  {% if rides %}
+    <table class="table table-bordered mt-3">
+      <thead class="table-dark">
+        <tr>
+          <th>ID</th>
+          <th>Pickup</th>
+          <th>Destination</th>
+          <th>Distance (km)</th>
+          <th>Price ($)</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for ride in rides %}
+        <tr>
+          <td>{{ ride.id }}</td>
+          <td>{{ ride.pickup_location }}</td>
+          <td>{{ ride.destination }}</td>
+          <td>{{ ride.total_distance }}</td>
+          <td>{{ ride.price }}</td>
+          <td>{{ ride.status|title }}</td>
+          <td>
+            <a class="btn btn-sm btn-info" href="{% url 'rides:detail' ride.id %}">View</a>
+
+            {% if request.user == ride.customer and not ride.rider %}
+              <a class="btn btn-sm btn-warning" href="{% url 'rides:update' ride.id %}">Edit</a>
+              <a class="btn btn-sm btn-danger" href="{% url 'rides:delete' ride.id %}">Delete</a>
+            {% elif request.user.user_role == "rider" and ride.status == "assigned" and ride.rider == request.user %}
+              <form method="POST" action="{% url 'rides:complete_ride' ride.id %}" style="display:inline;">
+                {% csrf_token %}
+                <button class="btn btn-sm btn-success" type="submit">Mark Complete</button>
+              </form>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <div class="alert alert-info mt-3">
+      {% if request.user.user_role == "customer" %}
+        You have no rides yet. <a href="{% url 'rides:create' %}">Book a ride</a>.
+      {% elif request.user.user_role == "rider" %}
+        No rides assigned yet. <a href="{% url 'rides:rider_dashboard' %}">View available rides</a>.
+      {% else %}
+        There are no rides in the system yet.
+      {% endif %}
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

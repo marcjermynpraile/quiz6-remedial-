@@ -1,0 +1,27 @@
+
+{% extends 'base.html' %}
+{% block title %}rider profile{% endblock %}
+{% block content %}
+  <h3>rider dashboard — {{ user.first_name }}</h3>
+  <div class="mb-3 card p-3">
+    <div><strong>total distance (all completed):</strong> {{ total_distance }} km</div>
+    <div class="text-muted">filter by date to see per-day totals</div>
+    <form method="get" class="row g-2 mt-2">
+      <div class="col-auto"><input type="date" name="date" class="form-control"></div>
+      <div class="col-auto"><button class="btn btn-outline-dark">filter</button></div>
+    </form>
+  </div>
+
+  <h5>completed rides</h5>
+  <ul class="list-group mt-2">
+    {% for r in rides %}
+      <li class="list-group-item d-flex justify-content-between">
+        <div>#{{ r.id }} — {{ r.destination }}</div>
+        <div>{{ r.total_distance }} km</div>
+      </li>
+    {% empty %}
+      <li class="list-group-item text-muted">no completed rides yet</li>
+    {% endfor %}
+  </ul>
+{% endblock %}
+

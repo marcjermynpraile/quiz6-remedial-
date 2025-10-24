@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h1 class="mb-4">Admin Dashboard</h1>
+
+<div class="row g-3">
+  <div class="col-md-4">
+    <div class="card text-center shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Users</h5>
+        <p class="card-text">Manage registered users and balances.</p>
+        <a href="{% url 'dashboard:users' %}" class="btn btn-primary">View Users</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="card text-center shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Rides</h5>
+        <p class="card-text">View and manage ride bookings.</p>
+        <a href="{% url 'rides:list' %}" class="btn btn-primary">View Rides</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
