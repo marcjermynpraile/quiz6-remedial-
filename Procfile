@@ -1,1 +1,2 @@
-web: gunicorn ride_booking_angeles.wsgi --log-file -
+web: gunicorn ride_booking_angeles.wsgi
+
